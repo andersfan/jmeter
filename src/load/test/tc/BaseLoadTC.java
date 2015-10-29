@@ -11,17 +11,25 @@ import org.apache.jmeter.protocol.java.sampler.JavaSamplerClient;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
 
+import com.google.gson.Gson;
+
+import load.test.api.PostLoginAPI;
+import load.test.requestobject.PostLoginRequestObject;
+import load.test.responseobject.PostLoginResponseObject;
+
 public abstract class BaseLoadTC implements JavaSamplerClient {
 	protected String phoneNumber;
 	protected String password;
 	protected SampleResult results;
 	protected String result = "";
+	protected PostLoginResponseObject postLoginResponseObject = null;
 	
 	public abstract void test(JavaSamplerContext arg0) throws UnsupportedEncodingException, IOException, ClientProtocolException, InvalidKeyException, NoSuchAlgorithmException;
 	
 	@Override
 	public Arguments getDefaultParameters() {
 		Arguments params = new Arguments();
+		params.addArgument("host", "test-api.mishi.cn");
 		params.addArgument("phoneNumber", "12000000000");
 		params.addArgument("password", "qqqqqq");
 		return params;
@@ -56,8 +64,32 @@ public abstract class BaseLoadTC implements JavaSamplerClient {
 
 	@Override
 	public void teardownTest(JavaSamplerContext arg0) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
+	}
+
+	
+	protected void login(JavaSamplerContext arg0) {
+		PostLoginAPI postLoginAPI = new PostLoginAPI();
+		postLoginAPI.setHost(String.format("http://%s/gw/mishi.user.lunch.login/1.0", arg0.getParameter("host")));
+		postLoginAPI.setApiName("mishi.user.lunch.login");
+		PostLoginRequestObject postLoginRequestObject = new PostLoginRequestObject();
+		postLoginAPI.setRequestObject(postLoginRequestObject);
+		postLoginAPI.getRequestObject().setNeedEncrypt("false");
+		postLoginAPI.getRequestObject().setPhoneNumber(phoneNumber);
+		postLoginAPI.getRequestObject().setPassword(password);
+		postLoginAPI.serializeRequestObject(postLoginAPI.getRequestObject());
+		result += new Gson().toJson(postLoginRequestObject);
+		try {
+			postLoginResponseObject = postLoginAPI.getResponseObject(null, PostLoginResponseObject.class);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		postLoginResponseObject.setCookieStore(postLoginAPI.getCookieStore());
+		result += new Gson().toJson(postLoginResponseObject);
 	}
 
 }

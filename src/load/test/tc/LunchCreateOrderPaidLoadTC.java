@@ -29,7 +29,6 @@ import load.test.responseobject.PostLoginResponseObject;
 
 public class LunchCreateOrderPaidLoadTC extends BaseLoadTC {
 	GetUserAddressesResponseObject getUserAddressesResponseObject = null;
-	PostLoginResponseObject postLoginResponseObject = null;
 
 	@Override
 	public void setupTest(JavaSamplerContext arg0) {

@@ -12,26 +12,20 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
 
-import com.google.gson.Gson;
-
 import load.test.api.PostCreateOrderAPI;
-import load.test.api.PostLoginAPI;
 import load.test.requestobject.Goods;
 import load.test.requestobject.PostCreateOrderRequestObject;
-import load.test.requestobject.PostLoginRequestObject;
-import load.test.responseobject.PostLoginResponseObject;
 
 public class CreateOrderLoadTC extends BaseLoadTC {
-	PostLoginResponseObject postLoginResponseObject = null;
 
-	public void test(JavaSamplerContext arg0) throws UnsupportedEncodingException, IOException, ClientProtocolException, InvalidKeyException,
-			NoSuchAlgorithmException {
+	public void test(JavaSamplerContext arg0) throws UnsupportedEncodingException, IOException, ClientProtocolException,
+			InvalidKeyException, NoSuchAlgorithmException {
 		results.setDataEncoding("utf-8");
 		results.setContentType("application/json");
 		result += phoneNumber;
 
 		PostCreateOrderAPI postCreateOrderAPI = new PostCreateOrderAPI();
-		postCreateOrderAPI.setHost(String.format("http://%s/gw/mishi.order.create/1.0",arg0.getParameter("host")));
+		postCreateOrderAPI.setHost(String.format("http://%s/gw/mishi.order.create/1.0", arg0.getParameter("host")));
 		postCreateOrderAPI.setApiName("mishi.order.create");
 		PostCreateOrderRequestObject postCreateOrderRequestObject = new PostCreateOrderRequestObject();
 		postCreateOrderAPI.setRequestObject(postCreateOrderRequestObject);
@@ -81,27 +75,7 @@ public class CreateOrderLoadTC extends BaseLoadTC {
 		phoneNumber = arg0.getParameter("phoneNumber");
 		password = arg0.getParameter("password");
 
-		PostLoginAPI postLoginAPI = new PostLoginAPI();
-		postLoginAPI.setHost(String.format("http://%s/gw/mishi.user.lunch.login/1.0", arg0.getParameter("host")));
-		postLoginAPI.setApiName("mishi.user.lunch.login");
-		PostLoginRequestObject postLoginRequestObject = new PostLoginRequestObject();
-		postLoginAPI.setRequestObject(postLoginRequestObject);
-		postLoginAPI.getRequestObject().setNeedEncrypt("false");
-		postLoginAPI.getRequestObject().setPhoneNumber(phoneNumber);
-		postLoginAPI.getRequestObject().setPassword(password);
-		postLoginAPI.serializeRequestObject(postLoginAPI.getRequestObject());
-		result += new Gson().toJson(postLoginRequestObject);
-		try {
-			postLoginResponseObject = postLoginAPI.getResponseObject(null, PostLoginResponseObject.class);
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		postLoginResponseObject.setCookieStore(postLoginAPI.getCookieStore());
-		result += new Gson().toJson(postLoginResponseObject);
+		this.login(arg0);
 	}
 
 }
