@@ -1,12 +1,15 @@
 package load.test.apibase;
 
+import java.net.URI;
+
 import org.apache.http.client.methods.HttpGet;
 
 public abstract class GetAPI extends BaseAPI {
 	
 	@Override
 	public void createHttpMethodAndLogRequest(){
-		this.request = new HttpGet(this.host);		
+		URI uri = this.TransferUri();
+		this.request = new HttpGet(uri);		
 		this.setHttpHeaders();	
 	}
 	

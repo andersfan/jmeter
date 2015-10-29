@@ -3,6 +3,10 @@ package load.test.apibase;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -45,6 +49,10 @@ public abstract class BaseAPI {
 
 	public String getHost() {
 		return this.host;
+	}
+	
+	public Map<String, String> getUriParams() {
+		return this.uriParams;
 	}
 
 	public String getResponseEntityStr() throws IOException {
@@ -262,5 +270,25 @@ public abstract class BaseAPI {
 
 	public void setApiName(String apiName) {
 		this.apiName = apiName;
+	}
+	
+	public URI TransferUri() {
+		// Fix java.net.URISyntaxException: Illegal character in query at index
+		// 75 issue
+		URL url = null;
+		try {
+			url = new URL(this.host);
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		URI uri = null;
+		try {
+			uri = new URI(url.getProtocol(), url.getHost(), url.getPath(), url.getQuery(), null);
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return uri;
 	}
 }

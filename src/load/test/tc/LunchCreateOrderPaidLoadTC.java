@@ -15,13 +15,12 @@ import org.apache.jmeter.samplers.SampleResult;
 import com.google.gson.Gson;
 
 import load.test.api.GetUserAddressesAPI;
+import load.test.api.PostAlipayCallbackAPI;
 import load.test.api.PostCreateOrderAPI;
-import load.test.api.PostUpdateOrderStatusAPI;
 import load.test.api.PostUserAddressAPI;
 import load.test.requestobject.Goods;
 import load.test.requestobject.GoodsRice;
 import load.test.requestobject.PostCreateOrderRequestObject;
-import load.test.requestobject.PostUpdateOrderStatusRequestObject;
 import load.test.requestobject.PostUserAddressRequestObject;
 import load.test.responseobject.GetUserAddressesResponseObject;
 
@@ -74,7 +73,8 @@ public class LunchCreateOrderPaidLoadTC extends BaseLoadTC {
 		GetUserAddressesAPI getUserAddressesAPI = new GetUserAddressesAPI();
 		getUserAddressesAPI.setHost("http://test-api.mishi.cn/gw/mishi.user.address.get/1.0");
 		getUserAddressesAPI.setApiName("mishi.user.address.get");
-		getUserAddressesAPI.setUrlParam(arg0.getParameter("logisticsType"), arg0.getParameter("productBiz"), arg0.getParameter("shopId"));
+		getUserAddressesAPI.setUrlParam(arg0.getParameter("logisticsType"), arg0.getParameter("productBiz"),
+				arg0.getParameter("shopId"));
 
 		try {
 			getUserAddressesResponseObject = getUserAddressesAPI
@@ -88,7 +88,7 @@ public class LunchCreateOrderPaidLoadTC extends BaseLoadTC {
 		}
 		result += new Gson().toJson(getUserAddressesResponseObject);
 	}
-	
+
 	@Override
 	public Arguments getDefaultParameters() {
 		Arguments params = new Arguments();
@@ -119,19 +119,19 @@ public class LunchCreateOrderPaidLoadTC extends BaseLoadTC {
 		params.addArgument("goodsName", "审核后添加");
 		params.addArgument("goodsCount", "1");
 		params.addArgument("goodsId", "53924");
-		params.addArgument("goodsPrice", "1");		
-		params.addArgument("logisticsTime", "2015-10-29");		
-		params.addArgument("arrivePeriod", "12:30-13:00");	
-		params.addArgument("payChannel", "1");	
-		params.addArgument("deliveryDistance", "1");	
-		params.addArgument("deliveryPeriod", "11:00-11:30");	
-		
+		params.addArgument("goodsPrice", "1");
+		params.addArgument("logisticsTime", "2015-10-29");
+		params.addArgument("arrivePeriod", "12:30-13:00");
+		params.addArgument("payChannel", "1");
+		params.addArgument("deliveryDistance", "1");
+		params.addArgument("deliveryPeriod", "11:00-11:30");
+
 		return params;
 	}
 
 	@Override
-	public void test(JavaSamplerContext arg0) throws UnsupportedEncodingException, IOException, ClientProtocolException, InvalidKeyException,
-			NoSuchAlgorithmException {
+	public void test(JavaSamplerContext arg0) throws UnsupportedEncodingException, IOException, ClientProtocolException,
+			InvalidKeyException, NoSuchAlgorithmException {
 		results.setDataEncoding("utf-8");
 		results.setContentType("application/json");
 		result += phoneNumber;
@@ -182,17 +182,17 @@ public class LunchCreateOrderPaidLoadTC extends BaseLoadTC {
 		orderID = orderID.substring(orderID.indexOf(":\""));
 		orderID = orderID.substring(2, 18);
 		result += orderID;
-		PostUpdateOrderStatusAPI postUpdateOrderStatusAPI = new PostUpdateOrderStatusAPI();
-		postUpdateOrderStatusAPI.setHost(String.format("http://%s/api/order/%s", arg0.getParameter("host"), orderID));
-		PostUpdateOrderStatusRequestObject postUpdateOrderStatusRequestObject = new PostUpdateOrderStatusRequestObject();
-		postUpdateOrderStatusRequestObject.setAction("paidOrder");
-		postUpdateOrderStatusRequestObject.setNeedEncrypt("true");
-		postUpdateOrderStatusRequestObject.setUserType(0);
-		postUpdateOrderStatusAPI.setRequestObject(postUpdateOrderStatusRequestObject);
-		postUpdateOrderStatusAPI.serializeRequestObject(postUpdateOrderStatusAPI.getRequestObject());
-		postUpdateOrderStatusAPI.sendRequest(postLoginResponseObject.getCookieStore());
-		result += postUpdateOrderStatusAPI.getEntitystr();
 
+		PostAlipayCallbackAPI postAlipayCallbackAPI = new PostAlipayCallbackAPI();
+		postAlipayCallbackAPI
+				.setHost(String.format("http://%s/test/fund/alipay/payCallback", arg0.getParameter("host")));
+		postAlipayCallbackAPI.setUrlParam(orderID,
+				Double.toString(Double.parseDouble(arg0.getParameter("goodsPrice")) / 100 + 3));
+
+		postAlipayCallbackAPI.sendRequest(null);
+
+		result += postAlipayCallbackAPI.getHost();
+		result += postAlipayCallbackAPI.getEntitystr();
 	}
 
 }
