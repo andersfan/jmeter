@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Class-Path: lib/ApacheJMeter_java.jar lib/ApacheJMeter_core.jar lib/httpclient-4.2.6.jar lib/httpcore-4.2.5.jar lib/httpmime-4.2.6.jar lib/commons-codec-1.9.jar lib/gson-2.3.1.jar
+Main-Class: load.test.main.Program

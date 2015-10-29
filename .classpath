@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="/Users/andersfan/Desktop/apache-jmeter-2.13/lib/ext/ApacheJMeter_java.jar"/>
+	<classpathentry kind="lib" path="/Users/andersfan/Desktop/apache-jmeter-2.13/lib/ext/ApacheJMeter_core.jar"/>
+	<classpathentry kind="lib" path="/Users/andersfan/Desktop/apache-jmeter-2.13/lib/httpclient-4.2.6.jar"/>
+	<classpathentry kind="lib" path="/Users/andersfan/Desktop/apache-jmeter-2.13/lib/httpcore-4.2.5.jar"/>
+	<classpathentry kind="lib" path="/Users/andersfan/Desktop/apache-jmeter-2.13/lib/httpmime-4.2.6.jar"/>
+	<classpathentry kind="lib" path="/Users/andersfan/Desktop/maven_project/mishi.apitest/commons-codec/commons-codec/1.9/commons-codec-1.9.jar" sourcepath="/Users/andersfan/Desktop/maven_project/mishi.apitest/commons-codec/commons-codec/1.9/commons-codec-1.9-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="commons-codec"/>
+			<attribute name="maven.artifactId" value="commons-codec"/>
+			<attribute name="maven.version" value="1.9"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/andersfan/Desktop/maven_project/mishi.apitest/com/google/code/gson/gson/2.3.1/gson-2.3.1.jar" sourcepath="/Users/andersfan/Desktop/maven_project/mishi.apitest/com/google/code/gson/gson/2.3.1/gson-2.3.1-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.google.code.gson"/>
+			<attribute name="maven.artifactId" value="gson"/>
+			<attribute name="maven.version" value="2.3.1"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
