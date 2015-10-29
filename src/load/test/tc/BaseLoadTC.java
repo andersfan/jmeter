@@ -6,7 +6,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.http.client.ClientProtocolException;
-import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerClient;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
@@ -25,15 +24,6 @@ public abstract class BaseLoadTC implements JavaSamplerClient {
 	protected PostLoginResponseObject postLoginResponseObject = null;
 	
 	public abstract void test(JavaSamplerContext arg0) throws UnsupportedEncodingException, IOException, ClientProtocolException, InvalidKeyException, NoSuchAlgorithmException;
-	
-	@Override
-	public Arguments getDefaultParameters() {
-		Arguments params = new Arguments();
-		params.addArgument("host", "test-api.mishi.cn");
-		params.addArgument("phoneNumber", "12000000000");
-		params.addArgument("password", "qqqqqq");
-		return params;
-	}
 
 	@Override
 	public SampleResult runTest(JavaSamplerContext arg0) {
