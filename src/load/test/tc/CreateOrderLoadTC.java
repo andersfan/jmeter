@@ -18,14 +18,14 @@ import load.test.requestobject.PostCreateOrderRequestObject;
 
 public class CreateOrderLoadTC extends BaseLoadTC {
 
-	public void test(JavaSamplerContext arg0) throws UnsupportedEncodingException, IOException, ClientProtocolException,
-			InvalidKeyException, NoSuchAlgorithmException {
+	public void test(JavaSamplerContext arg0) throws UnsupportedEncodingException, IOException, ClientProtocolException, InvalidKeyException,
+			NoSuchAlgorithmException {
 		results.setDataEncoding("utf-8");
 		results.setContentType("application/json");
 		result += phoneNumber;
 
 		PostCreateOrderAPI postCreateOrderAPI = new PostCreateOrderAPI();
-		postCreateOrderAPI.setHost(String.format("http://%s/gw/mishi.order.create/1.0", arg0.getParameter("host")));
+		postCreateOrderAPI.setHost(String.format("http://%s/gw/mishi.order.create/1.0",arg0.getParameter("host")));
 		postCreateOrderAPI.setApiName("mishi.order.create");
 		PostCreateOrderRequestObject postCreateOrderRequestObject = new PostCreateOrderRequestObject();
 		postCreateOrderAPI.setRequestObject(postCreateOrderRequestObject);
@@ -49,11 +49,14 @@ public class CreateOrderLoadTC extends BaseLoadTC {
 		postCreateOrderAPI.sendRequest(postLoginResponseObject.getCookieStore());
 		results.sampleEnd();
 		result += postCreateOrderAPI.getEntitystr();
+		if (!postCreateOrderAPI.getEntitystr().contains("\"orderId\":\"")) {
+			throw new IOException();
+		}
 	}
 
 	@Override
 	public Arguments getDefaultParameters() {
-		Arguments params = new Arguments();
+		Arguments params = new Arguments();		
 		params.addArgument("host", "test-api.mishi.cn");
 		params.addArgument("phoneNumber", "12000000000");
 		params.addArgument("password", "qqqqqq");

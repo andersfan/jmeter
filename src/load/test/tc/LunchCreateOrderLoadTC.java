@@ -14,21 +14,25 @@ import org.apache.jmeter.samplers.SampleResult;
 
 import com.google.gson.Gson;
 
-import load.test.api.GetUserAddressesAPI;
 import load.test.api.PostCreateOrderAPI;
-import load.test.api.PostUserAddressAPI;
 import load.test.requestobject.Goods;
 import load.test.requestobject.GoodsRice;
 import load.test.requestobject.PostCreateOrderRequestObject;
-import load.test.requestobject.PostUserAddressRequestObject;
-import load.test.responseobject.GetUserAddressesResponseObject;
 
 public class LunchCreateOrderLoadTC extends BaseLoadTC {
-	GetUserAddressesResponseObject getUserAddressesResponseObject = null;
+
+	@Override
+	public void setupTest(JavaSamplerContext arg0) {
+		this.results = new SampleResult();
+		phoneNumber = arg0.getParameter("phoneNumber");
+		password = arg0.getParameter("password");
+
+		this.login(arg0);
+	}
 	
 	@Override
-	public void test(JavaSamplerContext arg0) throws UnsupportedEncodingException, IOException, ClientProtocolException, InvalidKeyException,
-			NoSuchAlgorithmException {
+	public void test(JavaSamplerContext arg0) throws UnsupportedEncodingException, IOException, ClientProtocolException,
+			InvalidKeyException, NoSuchAlgorithmException {
 		results.setDataEncoding("utf-8");
 		results.setContentType("application/json");
 		result += phoneNumber;
@@ -38,8 +42,7 @@ public class LunchCreateOrderLoadTC extends BaseLoadTC {
 		postCreateOrderAPI.setApiName("mishi.order.create");
 		PostCreateOrderRequestObject postCreateOrderRequestObject = new PostCreateOrderRequestObject();
 		postCreateOrderAPI.setRequestObject(postCreateOrderRequestObject);
-		postCreateOrderAPI.getRequestObject()
-				.setLogisticsId(getUserAddressesResponseObject.getData().get(0).getAddrId());
+		postCreateOrderAPI.getRequestObject().setLogisticsId(Integer.parseInt(arg0.getParameter("addrId")));
 		postCreateOrderAPI.getRequestObject().setLogisticsType(Integer.parseInt(arg0.getParameter("logisticsType")));
 		postCreateOrderAPI.getRequestObject().setLogisticsTime(arg0.getParameter("logisticsTime"));
 		postCreateOrderAPI.getRequestObject().setShopId(Integer.parseInt(arg0.getParameter("shopId")));
@@ -73,6 +76,9 @@ public class LunchCreateOrderLoadTC extends BaseLoadTC {
 		postCreateOrderAPI.sendRequest(postLoginResponseObject.getCookieStore());
 		results.sampleEnd();
 		result += postCreateOrderAPI.getEntitystr();
+		if (!postCreateOrderAPI.getEntitystr().contains("\"orderId\":\"")) {
+			throw new IOException();
+		}
 	}
 
 	@Override
@@ -81,99 +87,20 @@ public class LunchCreateOrderLoadTC extends BaseLoadTC {
 		params.addArgument("host", "test-api.mishi.cn");
 		params.addArgument("phoneNumber", "12000000000");
 		params.addArgument("password", "qqqqqq");
-		params.addArgument("logisticsType", "1");
-		params.addArgument("city", "上海市");
-		params.addArgument("districtCode", "310104");
-		params.addArgument("addressType", "0");
-		params.addArgument("addressId", "0");
-		params.addArgument("cityCode", "021");
-		params.addArgument("provinceCode", "310000000000");
-		params.addArgument("district", "徐汇区");
-		params.addArgument("lng", "121.4273765771758");
-		params.addArgument("isDefault", "0");
-		params.addArgument("contactName", "范旭斐");
-		params.addArgument("addrId", "0");
-		params.addArgument("inputType", "2");
-		params.addArgument("contactPhone", "12355555555");
-		params.addArgument("relative", "0");
-		params.addArgument("province", "上海市");
-		params.addArgument("keyWords", "宜山路地铁站");
-		params.addArgument("lat", "31.18596707143902");
-		params.addArgument("dateType", "2");
+		params.addArgument("logisticsType", "1");	
 		params.addArgument("shopId", "28823");
 		params.addArgument("productBiz", "2");
 		params.addArgument("goodsName", "审核后添加");
 		params.addArgument("goodsCount", "1");
 		params.addArgument("goodsId", "53924");
-		params.addArgument("goodsPrice", "1");		
-		params.addArgument("logisticsTime", "2015-10-29");		
-		params.addArgument("arrivePeriod", "12:30-13:00");	
-		params.addArgument("payChannel", "1");	
-		params.addArgument("deliveryDistance", "1");	
-		params.addArgument("deliveryPeriod", "11:00-11:30");	
-		
+		params.addArgument("goodsPrice", "1");
+		params.addArgument("logisticsTime", "2015-10-29");
+		params.addArgument("arrivePeriod", "12:30-13:00");
+		params.addArgument("payChannel", "1");
+		params.addArgument("deliveryDistance", "1");
+		params.addArgument("deliveryPeriod", "11:00-11:30");
+		params.addArgument("addrId", "91794");
 		return params;
-	}
-	
-	@Override
-	public void setupTest(JavaSamplerContext arg0) {
-		this.results = new SampleResult();
-		phoneNumber = arg0.getParameter("phoneNumber");
-		password = arg0.getParameter("password");
-
-		this.login(arg0);
-
-		PostUserAddressAPI postUserAddressAPI = new PostUserAddressAPI();
-		postUserAddressAPI.setHost(String.format("http://%s/api/user/%s/address", arg0.getParameter("host"),
-				postLoginResponseObject.getData().getUserId()));
-		PostUserAddressRequestObject postUserAddressRequestObject = new PostUserAddressRequestObject();
-		postUserAddressRequestObject.setCity(arg0.getParameter("city"));
-		postUserAddressRequestObject.setDistrictCode(arg0.getParameter("districtCode"));
-		postUserAddressRequestObject.setType(Integer.parseInt(arg0.getParameter("addressType")));
-		postUserAddressRequestObject.setAddressId(Integer.parseInt(arg0.getParameter("addressId")));
-		postUserAddressRequestObject.setCityCode(arg0.getParameter("cityCode"));
-		postUserAddressRequestObject.setProvinceCode(arg0.getParameter("provinceCode"));
-		postUserAddressRequestObject.setDistrict(arg0.getParameter("district"));
-		postUserAddressRequestObject.setLng(Double.parseDouble(arg0.getParameter("lng")));
-		postUserAddressRequestObject.setIsDefault(Integer.parseInt(arg0.getParameter("isDefault")));
-		postUserAddressRequestObject.setContactName(arg0.getParameter("contactName"));
-		postUserAddressRequestObject.setAddrId(Integer.parseInt(arg0.getParameter("addrId")));
-		postUserAddressRequestObject.setInputType(arg0.getParameter("inputType"));
-		postUserAddressRequestObject.setContactPhone(arg0.getParameter("contactPhone"));
-		postUserAddressRequestObject.setRelative(Integer.parseInt(arg0.getParameter("relative")));
-		postUserAddressRequestObject.setProvince(arg0.getParameter("province"));
-		postUserAddressRequestObject.setKeyWords(arg0.getParameter("keyWords"));
-		postUserAddressRequestObject.setLat(Double.parseDouble(arg0.getParameter("lat")));
-		postUserAddressAPI.setRequestObject(postUserAddressRequestObject);
-		postUserAddressAPI.serializeRequestObject(postUserAddressAPI.getRequestObject());
-		result += new Gson().toJson(postUserAddressRequestObject);
-		try {
-			postUserAddressAPI.sendRequest(postLoginResponseObject.getCookieStore());
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		result += postUserAddressAPI.getEntitystr();
-
-		GetUserAddressesAPI getUserAddressesAPI = new GetUserAddressesAPI();
-		getUserAddressesAPI.setHost("http://test-api.mishi.cn/gw/mishi.user.address.get/1.0");
-		getUserAddressesAPI.setApiName("mishi.user.address.get");
-		getUserAddressesAPI.setUrlParam(arg0.getParameter("logisticsType"), arg0.getParameter("productBiz"), arg0.getParameter("shopId"));
-
-		try {
-			getUserAddressesResponseObject = getUserAddressesAPI
-					.getResponseObject(postLoginResponseObject.getCookieStore(), GetUserAddressesResponseObject.class);
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		result += new Gson().toJson(getUserAddressesResponseObject);
 	}
 
 }

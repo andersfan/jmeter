@@ -47,7 +47,6 @@ public abstract class BaseLoadTC implements JavaSamplerClient {
 			e.printStackTrace();
 		} finally {
 			results.setResponseMessage(result);
-			results.sampleEnd();
 		}
 		return results;
 	}
@@ -57,7 +56,6 @@ public abstract class BaseLoadTC implements JavaSamplerClient {
 		// TODO Auto-generated method stub		
 	}
 
-	
 	protected void login(JavaSamplerContext arg0) {
 		PostLoginAPI postLoginAPI = new PostLoginAPI();
 		postLoginAPI.setHost(String.format("http://%s/gw/mishi.user.lunch.login/1.0", arg0.getParameter("host")));

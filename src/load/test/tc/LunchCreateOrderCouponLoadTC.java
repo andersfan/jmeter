@@ -166,7 +166,7 @@ public class LunchCreateOrderCouponLoadTC extends BaseLoadTC {
 		result += postUserAddressAPI.getEntitystr();
 
 		GetUserAddressesAPI getUserAddressesAPI = new GetUserAddressesAPI();
-		getUserAddressesAPI.setHost("http://test-api.mishi.cn/gw/mishi.user.address.get/1.0");
+		getUserAddressesAPI.setHost(String.format("http://%s/gw/mishi.user.address.get/1.0",arg0.getParameter("host")));
 		getUserAddressesAPI.setApiName("mishi.user.address.get");
 		getUserAddressesAPI.setUrlParam(arg0.getParameter("logisticsType"), arg0.getParameter("productBiz"), arg0.getParameter("shopId"));
 
